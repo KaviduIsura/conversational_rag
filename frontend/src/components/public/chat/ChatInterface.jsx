@@ -125,16 +125,24 @@ export const ChatInterface = ({ messages, isTyping }) => {
                     }}
                   >
                     {!isUser ? (
-                      <Box className="markdown-body" sx={{ 
-                        '& p:first-of-type': { mt: 0 }, 
-                        '& p:last-child': { mb: 0 },
-                        '& p': { fontSize: 14, lineHeight: 1.5 },
-                        color: theme.palette.text.primary 
-                      }}>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {message.content}
-                        </ReactMarkdown>
-                      </Box>
+                      message.content === '' ? (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, height: 24, px: 1 }}>
+                          <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0 }} style={{ width: 6, height: 6, backgroundColor: '#0B76FF', borderRadius: '50%' }} />
+                          <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }} style={{ width: 6, height: 6, backgroundColor: '#0B76FF', borderRadius: '50%' }} />
+                          <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }} style={{ width: 6, height: 6, backgroundColor: '#0B76FF', borderRadius: '50%' }} />
+                        </Box>
+                      ) : (
+                        <Box className="markdown-body" sx={{ 
+                          '& p:first-of-type': { mt: 0 }, 
+                          '& p:last-child': { mb: 0 },
+                          '& p': { fontSize: 14, lineHeight: 1.5 },
+                          color: theme.palette.text.primary 
+                        }}>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {message.content}
+                          </ReactMarkdown>
+                        </Box>
+                      )
                     ) : (
                       <Typography variant="body2" fontSize={14}>{message.content}</Typography>
                     )}
@@ -182,28 +190,7 @@ export const ChatInterface = ({ messages, isTyping }) => {
           );
         })}
 
-        {isTyping && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              width: '100%',
-              marginBottom: 16
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Avatar sx={{ bgcolor: 'secondary.main', width: 36, height: 36 }}>
-                <SmartToyIcon />
-              </Avatar>
-              <Paper sx={{ ...publicGlassStyle, p: 2, borderRadius: 3, display: 'flex', gap: 1 }}>
-                <CircularProgress size={20} color="secondary" />
-                <Typography variant="body2" color="text.secondary">Thinking...</Typography>
-              </Paper>
-            </Box>
-          </motion.div>
-        )}
+        {/* The typing indicator is now rendered inside the empty AI message bubble */}
       </AnimatePresence>
       <div ref={messagesEndRef} />
 
