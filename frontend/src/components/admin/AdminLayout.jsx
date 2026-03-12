@@ -1,74 +1,112 @@
-import React, { useState } from 'react';
-import { Box, AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, ThemeProvider, CssBaseline } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { adminTheme } from '../../theme/adminTheme';
+import React, { useState } from "react";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  ThemeProvider,
+  CssBaseline
+} from "@mui/material";
 
-const DRAWER_WIDTH = 280;
+import MenuIcon from "@mui/icons-material/Menu";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import SettingsIcon from "@mui/icons-material/Settings";
+import TourIcon from "@mui/icons-material/Tour";
+import BookOnlineIcon from "@mui/icons-material/BookOnline";
+import PeopleIcon from "@mui/icons-material/People";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
+import ArticleIcon from "@mui/icons-material/Article";
+import PaymentIcon from "@mui/icons-material/Payment";
+
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { adminTheme } from "../../theme/adminTheme";
+
+const DRAWER_WIDTH = 260;
 
 export const AdminLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
   const navItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' },
-    { text: 'Destinations', icon: <FlightTakeoffIcon />, path: '/admin/destinations' },
-    { text: 'Knowledge Base', icon: <LibraryBooksIcon />, path: '/admin/knowledge-base' },
-    { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },
+    { text: "Dashboard", icon: <DashboardIcon />, path: "/admin" },
+    { text: "Destinations", icon: <FlightTakeoffIcon />, path: "/admin/destinations" },
+    { text: "Tours & Packages", icon: <TourIcon />, path: "/admin/tours" },
+    { text: "Bookings", icon: <BookOnlineIcon />, path: "/admin/bookings" },
+    { text: "Users", icon: <PeopleIcon />, path: "/admin/users" },
+    { text: "Reviews", icon: <RateReviewIcon />, path: "/admin/reviews" },
+    { text: "Gallery", icon: <PhotoLibraryIcon />, path: "/admin/gallery" },
+    { text: "Blog Posts", icon: <ArticleIcon />, path: "/admin/blog" },
+    { text: "Knowledge Base", icon: <LibraryBooksIcon />, path: "/admin/knowledge-base" },
+    { text: "Payments", icon: <PaymentIcon />, path: "/admin/payments" },
+    { text: "Settings", icon: <SettingsIcon />, path: "/admin/settings" }
   ];
 
   const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ justifyContent: 'center' }}>
-        <Typography variant="h6" fontWeight="bold" color="primary.light">
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <Toolbar sx={{ justifyContent: "center" }}>
+        <Typography variant="h6" fontWeight={700}>
           Travel Admin
         </Typography>
       </Toolbar>
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.1)' }} />
-      <List sx={{ flexGrow: 1, pt: 2 }}>
-        {navItems.map((item) => (
-          <ListItem 
-            key={item.text} 
-            button 
-            onClick={() => {
-              navigate(item.path);
-              setMobileOpen(false);
-            }}
-            sx={{
-              margin: '8px 16px',
-              borderRadius: 2,
-              backgroundColor: location.pathname === item.path ? 'rgba(255,255,255,0.1)' : 'transparent',
-              '&:hover': {
-                backgroundColor: 'rgba(255,255,255,0.2)',
-              }
-            }}
-          >
-            <ListItemIcon sx={{ color: location.pathname === item.path ? 'primary.light' : 'rgba(255,255,255,0.7)', minWidth: 40 }}>
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText 
-              primary={item.text} 
-              primaryTypographyProps={{ 
-                color: location.pathname === item.path ? '#fff' : 'rgba(255,255,255,0.7)',
-                fontWeight: location.pathname === item.path ? 600 : 400
-              }} 
-            />
-          </ListItem>
-        ))}
+
+      <Divider />
+
+      <List sx={{ px: 2, py: 2 }}>
+        {navItems.map((item) => {
+          const active = location.pathname === item.path;
+
+          return (
+            <ListItemButton
+              key={item.text}
+              onClick={() => {
+                navigate(item.path);
+                setMobileOpen(false);
+              }}
+              sx={{
+                borderRadius: 2,
+                mb: 1,
+                backgroundColor: active ? "primary.main" : "transparent",
+                color: active ? "#fff" : "text.secondary",
+                "&:hover": {
+                  backgroundColor: active ? "primary.dark" : "action.hover"
+                }
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: active ? "#fff" : "text.secondary",
+                  minWidth: 36
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              <ListItemText
+                primary={item.text}
+                primaryTypographyProps={{
+                  fontWeight: active ? 600 : 500
+                }}
+              />
+            </ListItemButton>
+          );
+        })}
       </List>
-      <Box sx={{ p: 2 }}>
-         <Typography variant="caption" color="rgba(255,255,255,0.5)">
-            Conversational RAG Backend<br/>v1.0.0
-         </Typography>
+
+      <Box sx={{ mt: "auto", p: 2 }}>
+        <Typography variant="caption" color="text.secondary">
+          Travel Admin Panel v1.0
+        </Typography>
       </Box>
     </Box>
   );
@@ -76,59 +114,78 @@ export const AdminLayout = () => {
   return (
     <ThemeProvider theme={adminTheme}>
       <CssBaseline />
-      <Box sx={{ display: 'flex', height: '100vh', bgcolor: 'background.default' }}>
-        <AppBar 
-          position="fixed" 
-          sx={{ 
-            width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` }, 
-            ml: { sm: `${DRAWER_WIDTH}px` },
-            bgcolor: 'background.paper',
-            color: 'text.primary',
-            boxShadow: 1
-          }}
-        >
+
+      <Box sx={{ display: "flex", height: "100vh" }}>
+        {/* AppBar */}
+
+        <AppBar
+  position="fixed"
+  elevation={1}
+  sx={{
+    width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
+    ml: { sm: `${DRAWER_WIDTH}px` },
+    backgroundColor: "#0f172a",
+    color: "#fff"
+  }}
+>
+          
           <Toolbar>
             <IconButton
               color="inherit"
-              aria-label="open drawer"
               edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              onClick={() => setMobileOpen(!mobileOpen)}
+              sx={{ mr: 2, display: { sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
-              {navItems.find(i => i.path === location.pathname)?.text || 'Admin'}
+
+            <Typography variant="h6" fontWeight={600}>
+              {navItems.find((i) => i.path === location.pathname)?.text ||
+                "Dashboard"}
             </Typography>
           </Toolbar>
         </AppBar>
-        
-        <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}>
+
+        {/* Sidebar */}
+
+        <Box component="nav" sx={{ width: { sm: DRAWER_WIDTH } }}>
           <Drawer
             variant="temporary"
             open={mobileOpen}
-            onClose={handleDrawerToggle}
+            onClose={() => setMobileOpen(false)}
             ModalProps={{ keepMounted: true }}
             sx={{
-              display: { xs: 'block', sm: 'none' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": { width: DRAWER_WIDTH }
             }}
           >
             {drawer}
           </Drawer>
+
           <Drawer
             variant="permanent"
-            sx={{
-              display: { xs: 'none', sm: 'block' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH, borderRight: 'none' },
-            }}
             open
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": { width: DRAWER_WIDTH }
+            }}
           >
             {drawer}
           </Drawer>
         </Box>
-        
-        <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 10, width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` }, overflowY: 'auto' }}>
+
+        {/* Main */}
+
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            p: 4,
+            mt: 8,
+            overflowY: "auto",
+            backgroundColor: "background.default"
+          }}
+        >
           <Outlet />
         </Box>
       </Box>
